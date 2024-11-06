@@ -1,0 +1,50 @@
+// Objeto para armazenar as respostas
+let respostas = {};
+
+// Função para salvar a resposta e exibir a próxima pergunta
+function nextQuestion(currentQuestion) {
+    // Captura a resposta do campo de texto correspondente
+    let answerInput = document.getElementById(`answer${currentQuestion}`);
+    
+    // Confirma que o elemento existe e é um input
+    if (answerInput instanceof HTMLInputElement) {
+        let answer = answerInput.value;  // Obtém o valor do campo
+        respostas[`question${currentQuestion}`] = answer;  // Armazena a resposta
+
+        // Esconde a pergunta atual, se ela existir
+        let currentQuestionElement = document.getElementById(`question${currentQuestion}`);
+        if (currentQuestionElement) {
+            currentQuestionElement.style.display = 'none';
+        }
+
+        // Mostra a próxima pergunta ou o botão de perfil se for a última pergunta
+        let nextQuestionElement = document.getElementById(`question${currentQuestion + 1}`);
+        if (nextQuestionElement) {
+            nextQuestionElement.style.display = 'block';
+        } else {
+            let showProfileBtn = document.getElementById("showProfileBtn");
+            if (showProfileBtn) {
+                showProfileBtn.style.display = 'block'; // Exibe o botão "Ver Perfil" ao final
+            }
+        }
+    } else {
+        console.error("Elemento de resposta não encontrado ou não é um input:", currentQuestion);
+    }
+}
+
+// Função para exibir o perfil final baseado nas respostas
+function showProfile() {
+    let profileText = "Aqui está o seu perfil gerado pelas respostas:\n";
+
+    // Adiciona as respostas ao perfil
+    profileText += respostas["question1"] ? `Filme favorito: ${respostas["question1"]}\n` : '';
+    profileText += respostas["question2"] ? `Preferência de lugar: ${respostas["question2"]}\n` : '';
+    profileText += "\nA IA está monitorando suas preferências e comportamento.";
+
+    // Exibe o perfil na página, se o elemento "profile" existir
+    let profileElement = document.getElementById("profile");
+    if (profileElement) {
+        profileElement.innerText = profileText;
+        profileElement.style.display = 'block';
+    }
+}
